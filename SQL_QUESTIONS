@@ -1,0 +1,30 @@
+select * from employees where country = 'FR'; --Get all employees from france
+
+update employees set country = 'BR' where additional_options->'dog_name' = '"Ellie"'; --Change the employee with a dog named ‘Ellie’ to be from Brazil (BR)
+
+select * from employees where 'basketball' = ANY(liked_sports); --Get all employees who like baseball.
+
+update employees set liked_sports = array_append(liked_sports, 'basketball') where not 'basketball' = ANY(liked_sports); --Change every employee who doesn’t like baseball to liking baseball.
+
+update employees set additional_options = additional_options::jsonb || '{"fox_name": "Alphie"}' where name = 'Spencer Fielder'; --Give Spencer a pet fox named Alfie.
+
+await prisClient.employee.findUnique({
+    where: {
+        country: 'FR'
+    },
+    select: {
+        column: true
+    }
+}) -- Write the non-bonus queries in the PrismaClient syntax assuming the client is called prisClient -1
+
+await prisClient.employee.update({
+    where: {
+        additional_options: {
+            path: ['dog_name'],
+            string_contains: 'Ellie',
+        }
+    },
+    data: {
+        country: 'BR'
+    }
+}) -- Write the non-bonus queries in the PrismaClient syntax assuming the client is called prisClient -2
